@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, doc, setDoc, addDoc, getDoc, getDocs, updateDoc, onSnapshot, increment, query, where } from "firebase/firestore";
+import { getFirestore, collection, doc, setDoc, addDoc, getDoc, getDocs, updateDoc, onSnapshot, increment, query, where, orderBy } from "firebase/firestore";
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, signOut } from "firebase/auth";
 
 const firebaseConfig = {
@@ -111,7 +111,8 @@ const addPost = async post => {
 }
 
 const snapshotPosts = (commit) => {
-    onSnapshot(postsCollection, (snapshot) => {
+    const q = query(postsCollection, orderBy("createdOn", "desc"))
+    onSnapshot(q, (snapshot) => {
         let postsArray = []
         snapshot.forEach(doc => {
             let post = doc.data()
